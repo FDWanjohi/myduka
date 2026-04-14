@@ -45,6 +45,43 @@ insert_users(users3)
 
 #2. Write sql queries to fetch the following data:
 #-sales per product
+
+def sales_per_product():
+    cur.execute(''' select product.name as p_name, sum(quantity*price) as total_sales
+                from sales join products on products.id = sales.pid group by p_name
+                ''')
+    sales_product=cur.fetchall()
+    return sales_product
+
+
 #-sales per day
+def sales_per_day():
+    cur.execute('''
+                select date(sales.created_at)as day, (sales.quantity * products.selling_price) as
+                total_sales from products join sales on sales.pid = products.id group by day;
+                ''')
+    sales_day = cur.fetchall()
+    return sales_day
+    
+
 #-profit per product
+def profit_per_product():
+    cur.execute('''
+select products.name as p_name, sum((selling_price - buying_price) * quantity) as total_profit
+                from sales join products on sales.pid = products.id group by p_name;
+    ''')
+    profit_product = cur.fetchall()
+    return profit_per_product
+
+
 #-profit per day
+def profit_per_day():
+    cur.execute('''
+select sate(sales.created_at) as day, sum((selling_price - buying_price) * quantity) as total_profit
+                from sales join products on sales.pid = products.id group by day;
+''')
+    profit_day = cur.fetchall()
+    return profit_day
+
+#task 14/04
+#change all your insert functions to use placeholders intead of f-strings

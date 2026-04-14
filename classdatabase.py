@@ -76,3 +76,4 @@ insert_products(product2)
 #Joins
 #select products.name as p_name, sum(quatity*selling_price) as total_sales form sales join products
 #on products.id=sales.pid group by p_name;
+
