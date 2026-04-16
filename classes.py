@@ -59,7 +59,39 @@ BankAccount2 = BankAccount(22234567,2234567,"Toria Toria","Jul_31_2020")
 print(type(BankAccount2))
 print(f"{self.BankAccount2} can deposit")
 print(f"{self.BankAccount2} can withdraw")
-print(f"{self.BankAccount3} can display_info")
+print(f"{self.BankAccount2} can display_info")
+
+#Create a Car Class Have the following attributes brand - model - year -fuel_capacity - fuel_level -is_running(boolen value) 
+# Have the following methods as behaviour for your class: start() stop() refuel() drive() display_car_info()
+
+class car:
+    def __init__(self, model, year, fuel_capacity, fuel_level, is_running):
+        self.model = model
+        self.year = year
+        self.fuel_capacity = fuel_capacity
+        self.fuel_level = fuel_level
+        self.is_running = is_running
+    
+      def talks(self):
+        print(f"{self.name} talks")
+
+    def start(self):
+        print(f"{self.model} starts")
+
+    def stop(self):
+        print(f"(self.model) stops")
+
+    def refuel(self):
+        print(f"{self.model} refuels")
+
+    def drive(self):
+        print(f"{self.model} drives")
+
+    def display_car_info(self):
+        print(f"{self.model}" display_car_info)
+
+
+
 
 
 
