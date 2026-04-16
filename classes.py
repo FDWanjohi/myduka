@@ -49,17 +49,17 @@ class BankAccount:
             print(f"{self.account_number} display_info")
 
 
-BankAccount1 = BankAccount(01234567,1234567,"Ell Ell","May_31_2020")
+BankAccount1 = BankAccount(11234567,1234567,"Ell Ell","May_31_2020")
 print(type(BankAccount1))
-BankAccount1.deposit()
-BankAccount1.withdraw()
-BankAccount1.display_info()
+print(f"{self.BankAccount1} can deposit")
+print(f"{self.BankAccount1} can withdraw")
+print(f"{self.BankAccount1} can display_info")
 
-BankAccount2 = BankAccount(02234567,2234567,"Toria Toria","Jul_31_2020")
+BankAccount2 = BankAccount(22234567,2234567,"Toria Toria","Jul_31_2020")
 print(type(BankAccount2))
-BankAccount2.deposit()
-BankAccount2.withdraw()
-BankAccount2.display_info()
+print(f"{self.BankAccount2} can deposit")
+print(f"{self.BankAccount2} can withdraw")
+print(f"{self.BankAccount3} can display_info")
 
 
 
