@@ -1,5 +1,5 @@
 from flask import Flask
-
+from database import get_products,get_sales
 #creating a Flask instance
 app = Flask (__name__)
 
@@ -12,7 +12,8 @@ def home():
 
 @app.route('/products')
 def products():
-    return "This is the products route"
+    products_data = get_products
+    return get_products
 
 @app.route('/sales')
 def sales():
