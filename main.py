@@ -1,5 +1,5 @@
 from flask import Flask , render_template, request,redirect,url_for,flash
-from database import get_products,get_sales,get_stock,insert_products, insert_sale,insert_stock, available_stock
+from database import get_products,get_sales,get_stock,insert_products, insert_sale,insert_stock, available_stock,get_users
 
 
 #creating a Flask instance
@@ -47,7 +47,7 @@ def add_sale():
         if check_stock < float(quantity):
             flash("Insufficient stock, can't complete sale",'danger')
             new_sale = (product_id,quantity)
-            insert_sales(new_sale)
+            insert_sale(new_sale)
             print("Sale Added Successfully")
             flash("Sale added successfully",'success')
     return redirect(url_for('sales'))
@@ -57,7 +57,7 @@ def add_sale():
 def stock():
     stock_data = get_stock()
     product = get_products ()
-    return render_template("stock.html", stock_data = stock_data, product = product_data)
+    return render_template("stock.html", stock_data = stock_data, product = product)
 
 @app.route('/add_stock',methods=['GET','POST'])
 def add_stock():
@@ -66,7 +66,7 @@ def add_stock():
         stock_quantity = request.form['stock_quantity']
         new_stock = (product_id,stock_quantity)
         insert_stock(new_stock)
-        #print("Stock Added Successfully")
+        print("Stock Added Successfully")
         flash("Stock added successfully",'success')
     return redirect(url_for('stock'))
 
@@ -79,6 +79,17 @@ def dashboard():
 @app.route("/login")
 def login():
     return render_template("login.html")
+
+@app.route('/add_users',methods=['GET','POST'])
+def add_users():
+    if request.method == 'POST':
+        user_email = request.form['u_email']
+        password = request.form['password']
+        new_login = (user_email,password)
+        insert_user_details(new_login)
+        print("Logged in Successfully")
+        flash("User Logged in successfully",'success')
+    return redirect(url_for('products'))
 
 
 @app.route('/register')

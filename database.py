@@ -26,6 +26,12 @@ def get_stock():
     stock = cur.fetchall()
     return stock
 
+#fetching users
+def get_users():
+    cur.execute("select * from users")
+    users = cur.fetchall()
+    return users
+
 
 def get_data(table):
     cur.execute(f"select * from {table}")
@@ -102,6 +108,6 @@ def insert_user(user_details):
 
 
 def check_user_exists(email):
-    cur.execute("select * from user where user.email = %s",(email,))
+    cur.execute("select * from users where user.email = %s",(email,))
     user_data = cur.fetchone()
     return user_data
