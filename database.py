@@ -42,8 +42,8 @@ def insert_stock(stock_details):
     cur.execute("insert into stock(pid,stock_quantity)values(%s,%s)",(stock_details))
     conn.commit()
 
-def insert_sales(sales_details):
-    cur.execute("insert into sales(pid,sale_quantity)values(%s,%s)",(sales_details))
+def insert_sale(sale_details):
+    cur.execute("insert into sales(pid,quantity)values(%s,%s)",(sale_details))
     conn.commit()
 
 
@@ -85,10 +85,10 @@ def profit_per_day():
 
 def available_stock(pid):
     cur.execute("select sum(stock_quantity) from stock where pid = %s",(pid,))
-    total_stock = cur.fetchone() [0] or 0
+    total_stock = cur.fetchone()[0] or 0
 
     cur.execute("select sum(quantity) from sales where pid = %s",(pid,))
-    total_sold = cur.fetchone() [0] or 0
+    total_sold = cur.fetchone()[0] or 0
 
     return total_stock - total_sold
 
@@ -97,4 +97,11 @@ def available_stock(pid):
 #print(check_stock)
 
 def insert_user(user_details):
-    cur.execute("insert into users(full_name,email,phone_number,password)values(%s,%s,%s%s)")
+    cur.execute("insert into users(full_name,email,phone_number,password)values(%s,%s,%s,%s)",user_details)
+    conn.commit()
+
+
+def check_user_exists(email):
+    cur.execute("select * from user where user.email = %s",(email,))
+    user_data = cur.fetchone()
+    return user_data

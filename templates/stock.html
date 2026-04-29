@@ -23,20 +23,22 @@
                         <div class="mb-3">
                             <select class="form-select" name="pid" aria-label="Default select example">
                                 <option selected>Select Product</option>
-                                {% for product in products_data %}
+                                {% for product in products %}
                                 <option value="{{ product[0] }}">{{ product [1] }}</option>
                                 {% endfor %}
                             </select>
                             <div class="mb-3">
-                                <label for="exampleInputPassword1" class="form-label">Product Quanity</label>
-                                <input type="number" name="p_quantity" class="form-control" id="exampleInputPassword1">
+                                <label for="exampleInputPassword1" class="form-label">Product Quantity</label>
+                                <input type="number" name="stock_quantity" class="form-control"
+                                    id="exampleInputPassword1">
                             </div>
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary" style="text-align: center;" my-3 py-3>Add
+                                <button type="submit" class="btn btn-primary my-3 py-3">Add
                                     Stock</button>
                             </div>
+                        </div>
                     </form>
                 </div>
 
@@ -48,6 +50,7 @@
 <table id="example" class="table table-striped">
     <thead>
         <tr>
+            <th>Stock ID</th>
             <th>Product ID</th>
             <th>Stock Quantity</th>
             <th>Created At</th>
@@ -59,12 +62,11 @@
             <td>{{ stock[0] }}</td>
             <td>{{ stock[1] }}</td>
             <td>{{ stock[2] }}</td>
+            <td>{{ stock[3] }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-</div>
 
-</div>
 
 {% endblock %}

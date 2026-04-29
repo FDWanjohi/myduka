@@ -1,5 +1,5 @@
 from flask import Flask , render_template, request,redirect,url_for,flash
-from database import get_products,get_sales,get_stock,insert_products, insert_sales,insert_stock
+from database import get_products,get_sales,get_stock,insert_products, insert_sale,insert_stock, available_stock
 
 
 #creating a Flask instance
@@ -34,8 +34,8 @@ def add_product():
 @app.route('/sales')
 def sales():
     sales_data = get_sales()
-    products_data = get_products()
-    return render_template("sales.html", sales_data = sales_data,products_data = products_data)
+    products = get_products()
+    return render_template("sales.html", sales_data = sales_data,products = products)
 
 @app.route('/add_sale',methods=['GET','POST'])
 def add_sale():
@@ -46,29 +46,28 @@ def add_sale():
         check_stock = available_stock(product_id)
         if check_stock < float(quantity):
             flash("Insufficient stock, can't complete sale",'danger')
-            return redirect()
-        new_sale = (product_id,product_quantity)
-        insert_sales(new_sale)
-        print("Sale Added Successfully")
-        flash("Sale added successfully",'success')
+            new_sale = (product_id,quantity)
+            insert_sales(new_sale)
+            print("Sale Added Successfully")
+            flash("Sale added successfully",'success')
     return redirect(url_for('sales'))
 
 
 @app.route('/stock')
 def stock():
     stock_data = get_stock()
-    product_data = get_products ()
-    return render_template("stock.html", stock_data = stock_data, product_data = product_data)
+    product = get_products ()
+    return render_template("stock.html", stock_data = stock_data, product = product_data)
 
 @app.route('/add_stock',methods=['GET','POST'])
 def add_stock():
     if request.method == 'POST':
-        product_id = request.form['p_id']
+        product_id = request.form['pid']
         stock_quantity = request.form['stock_quantity']
         new_stock = (product_id,stock_quantity)
         insert_stock(new_stock)
-        print("Stock Added Successfully")
-        flash("stock added successfully",'success')
+        #print("Stock Added Successfully")
+        flash("Stock added successfully",'success')
     return redirect(url_for('stock'))
 
 
