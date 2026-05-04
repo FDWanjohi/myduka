@@ -26,13 +26,6 @@ def get_stock():
     stock = cur.fetchall()
     return stock
 
-#fetching users
-def get_users():
-    cur.execute("select * from users")
-    users = cur.fetchall()
-    return users
-
-
 def get_data(table):
     cur.execute(f"select * from {table}")
     data = cur.fetchall()
@@ -98,9 +91,6 @@ def available_stock(pid):
 
     return total_stock - total_sold
 
-
-#check_stock = available_stock(58)
-#print(check_stock)
 
 def insert_user(user_details):
     cur.execute("insert into users(full_name,email,phone_number,password)values(%s,%s,%s,%s)",user_details)

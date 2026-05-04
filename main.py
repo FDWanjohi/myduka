@@ -1,6 +1,7 @@
-from flask import Flask , render_template, request,redirect,url_for,flash
-from database import get_products,get_sales,get_stock,insert_products, insert_sale,insert_stock, available_stock,get_users
+from flask import Flask , render_template, request,redirect,url_for,flash,session
+from database import get_products,get_sales,get_stock,insert_products, insert_sale,insert_stock, available_stock,insert_user,check_user_exists
 from flask_bcrypt import Bcrypt
+from functools import wraps
 
 #creating a Flask instance
 app = Flask(__name__)
@@ -14,9 +15,18 @@ app.secret_key = 'thisisthenextthingwedo'
 def home():#view function
     return  render_template('index.html')
 
+def login_required(f):
+    @wraps(f)
+    def protected(*args,**kwargs):
+        if 'email' not in session:
+            return redirect(url_for('login'))
+        return f(*args,**kwargs)
+    return protected
+
 
 # http://127.0.0.1:5000/products
 @app.route('/products')
+@login_required
 def products():
     products_data = get_products()
     return render_template("products.html", products_data = products_data)
@@ -33,6 +43,7 @@ def add_product():
     return redirect(url_for('products'))
 
 @app.route('/sales')
+@login_required
 def sales():
     sales_data = get_sales()
     products = get_products()
@@ -56,6 +67,7 @@ def add_sale():
 
 
 @app.route('/stock')
+@login_required
 def stock():
     stock_data = get_stock()
     product_data = get_products ()
@@ -73,6 +85,7 @@ def add_stock():
 
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
     return render_template("dashboard.html")
 
@@ -87,7 +100,8 @@ def login():
         if not existing_user:
             flash("User doesn't exist, please register",'danger')
         else:
-            if bcrypt.check_Password_hash(password,existing_user[-1]):
+            if bcrypt.check_Password_hash(existing_user[-1],password):
+                session['email'] = email
                 flash("Login successful",'success')
                 return redirect(url_for('dashboard'))
             else:
@@ -109,10 +123,14 @@ def register():
             insert_user(new_user)
             flash("User created successfully",'success')
         else:
-            flash("User existsalready, please login",'danger')
+            flash("User exists already, please login",'danger')
     return render_template("register.html")
 
-
+@app.route('/logout')
+def logout():
+    session.pop('email',None)
+    flash ("User logged out successfully",'success')
+    return redirect(url_for('login'))
 
 # run your application
 app.run(debug=True)
