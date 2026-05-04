@@ -23,4 +23,5 @@ ii.	Hiking Section: Hosts information about hiking
 
 iii.	Social Community Center: where users can engage and post, comment.
 
+<img width="1589" height="687" alt="image" src="https://github.com/user-attachments/assets/7ec387c3-feb0-4b06-9769-0007b8b52447" />
 
