@@ -1,9 +1,11 @@
 from flask import Flask , render_template, request,redirect,url_for,flash
 from database import get_products,get_sales,get_stock,insert_products, insert_sale,insert_stock, available_stock,get_users
-
+from flask_bcrypt import Bcrypt
 
 #creating a Flask instance
 app = Flask(__name__)
+
+bcrypt = Bcrypt(app)
 
 app.secret_key = 'thisisthenextthingwedo'
 
@@ -27,7 +29,6 @@ def add_product():
         selling_price = request.form['s_price']
         new_product = (product_name,buying_price,selling_price)
         insert_products(new_product)
-        print("Product Added Successfully")
         flash("Product added successfully",'success')
     return redirect(url_for('products'))
 
@@ -46,18 +47,19 @@ def add_sale():
         check_stock = available_stock(product_id)
         if check_stock < float(quantity):
             flash("Insufficient stock, can't complete sale",'danger')
-            new_sale = (product_id,quantity)
-            insert_sale(new_sale)
-            print("Sale Added Successfully")
-            flash("Sale added successfully",'success')
+            return redirect(url_for('sales'))
+        new_sale = (product_id,quantity)
+        insert_sale(new_sale)
+        print("Sale Added Successfully")
+        flash("Sale added successfully",'success')
     return redirect(url_for('sales'))
 
 
 @app.route('/stock')
 def stock():
     stock_data = get_stock()
-    product = get_products ()
-    return render_template("stock.html", stock_data = stock_data, product = product)
+    product_data = get_products ()
+    return render_template("stock.html", stock_data = stock_data, product_data= product_data)
 
 @app.route('/add_stock',methods=['GET','POST'])
 def add_stock():
@@ -66,7 +68,6 @@ def add_stock():
         stock_quantity = request.form['stock_quantity']
         new_stock = (product_id,stock_quantity)
         insert_stock(new_stock)
-        print("Stock Added Successfully")
         flash("Stock added successfully",'success')
     return redirect(url_for('stock'))
 
@@ -76,24 +77,39 @@ def dashboard():
     return render_template("dashboard.html")
 
 
-@app.route("/login")
+@app.route('/login',methods=['GET','POST'])
 def login():
+    if request.method=='POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        existing_user = check_user_exists(email)
+        if not existing_user:
+            flash("User doesn't exist, please register",'danger')
+        else:
+            if bcrypt.check_Password_hash(password,existing_user[-1]):
+                flash("Login successful",'success')
+                return redirect(url_for('dashboard'))
+            else:
+                flash("Password incorrect",'danger')
     return render_template("login.html")
 
-@app.route('/add_users',methods=['GET','POST'])
-def add_users():
-    if request.method == 'POST':
-        user_email = request.form['u_email']
-        password = request.form['password']
-        new_login = (user_email,password)
-        insert_user_details(new_login)
-        print("Logged in Successfully")
-        flash("User Logged in successfully",'success')
-    return redirect(url_for('products'))
-
-
-@app.route('/register')
+@app.route('/register',methods=['GET','POST'])
 def register():
+    if request.method == 'POST':
+        full_name = request.form['name']
+        email = request.form['email']
+        phone_number = request.form['phone']
+        password = request.form['password']
+        
+        existing_user = check_user_exists(email)
+        if not existing_user:
+            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+            new_user = (full_name,email,phone_number,hashed_password)
+            insert_user(new_user)
+            flash("User created successfully",'success')
+        else:
+            flash("User existsalready, please login",'danger')
     return render_template("register.html")
 
 
